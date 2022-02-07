@@ -21,12 +21,12 @@ export default async function handler(
     if (!user)
       return response
         .status(404)
-        .json({ status: "fail", message: "No user founded" });
+        .json({ status: "no_user", message: "No user founded" });
     const verified = await bcrypt.compare(password, user.password);
     if (!verified)
       return response
         .status(401)
-        .json({ status: "fail", message: "Invalid creadentials" });
+        .json({ status: "invalid", message: "Invalid creadentials" });
     const token = jwt.sign(
       { user_id: user._id, email },
       process.env.TOKEN_KEY as string,

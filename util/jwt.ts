@@ -7,9 +7,7 @@ const config = process.env;
 function parseJson(content: string) {
   try {
     return JSON.parse(content);
-  } catch (error) {
-    console.trace(error);
-  }
+  } catch (error) {}
 }
 
 export function verifiyToken(
@@ -39,7 +37,6 @@ export function verifiyToken(
       request.body = JSON.stringify({ user: decoded });
     }
   } catch (error) {
-    console.error(error);
     return response.status(401).send("Unauthorized");
   }
   return next(request, response);

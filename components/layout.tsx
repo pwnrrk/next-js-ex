@@ -26,9 +26,14 @@ function UserMenu() {
       </>
     );
   return (
-    <div className="flex-none hover:text-blue-500 px-3">
-      <Link href="/login">Login</Link>
-    </div>
+    <>
+      <div className="flex-none hover:text-blue-500 px-3">
+        <Link href="/login">Login</Link>
+      </div>
+      <div className="flex-none hover:text-blue-500 px-3">
+        <Link href="/register">Register</Link>
+      </div>
+    </>
   );
 }
 
