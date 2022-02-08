@@ -1,11 +1,27 @@
 import { model, models, Schema, Types } from "mongoose";
 
-const postSchema = new Schema({
-  title: { type: String },
-  date: { type: String },
-  author_id: { type: Types.ObjectId },
-});
+export interface PostModel {
+  _id: Types.ObjectId;
+  title: string;
+  description: string;
+  author_id: Types.ObjectId;
+  timestamps: string;
+}
+
+const postSchema = new Schema(
+  {
+    title: { type: String },
+    description: { type: String },
+    date: { type: String },
+    author_id: { type: Types.ObjectId },
+  },
+  {
+    timestamps: true,
+  }
+);
 
 if (!models.Post) model("Post", postSchema);
 
-export default models.Post;
+const Post = models.Post;
+
+export default Post;

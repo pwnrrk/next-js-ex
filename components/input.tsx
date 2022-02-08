@@ -14,14 +14,9 @@ type InputProps = {
   autoComplete?: string;
 };
 
+export const inputDefaultClass =
+  " rounded px-2 py-2 invalid:border-red-500 border-slate-300 w-full focus:outline-none focus:ring focus:ring-blue-300 transition ease";
+
 export default function Input(props: InputProps) {
-  return (
-    <input
-      {...props}
-      className={
-        props.className +
-        " rounded px-2 py-2 invalid:border-red-500 border-slate-300 w-full focus:outline-none focus:ring focus:ring-blue-300 transition ease"
-      }
-    />
-  );
+  return <input {...props} className={props.className + inputDefaultClass} />;
 }

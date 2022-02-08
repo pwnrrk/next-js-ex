@@ -10,7 +10,7 @@ function parseJson(content: string) {
   } catch (error) {}
 }
 
-export function verifiyToken(
+export function verifyToken(
   request: NextApiRequest,
   response: NextApiResponse,
   next: NextApiHandler
