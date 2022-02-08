@@ -1,13 +1,16 @@
 import { NextPage } from "next";
 import Head from "next/head";
 import Link from "next/link";
-import { FormEvent, useEffect, useState } from "react";
+import { createRef, FormEvent, useEffect, useState } from "react";
 import Layout from "../components/layout";
 import useUser from "../util/useUser";
 import { PostModel } from "../models/post";
 import Modal from "../components/modal";
 import Button from "../components/button";
 import Input, { inputDefaultClass } from "../components/input";
+import { FaPencilAlt, FaTrashAlt } from "react-icons/fa";
+import Alert from "../components/alert";
+import { Types } from "mongoose";
 
 function ProfileData() {
   const [user, setUser] = useState(null);
@@ -55,7 +58,7 @@ function AddPostForm({ setShowModal, getPost }: AddPostFormProps) {
       ).value,
     };
     setLoading(true);
-    const response = await fetch("/api/post/save", {
+    const response = await fetch("/api/post", {
       headers: {
         authorization: `Bearer ${localStorage.getItem("token")}`,
       },
@@ -111,6 +114,7 @@ function UserPost() {
   const [posts, setPosts] = useState(new Array<PostModel>());
   const [isLoading, setLoading] = useState(false);
   const [showModal, setShowModal] = useState(false);
+  const [isDeleting, setDeleting] = useState(false);
 
   const getPosts = async () => {
     setLoading(true);
@@ -134,17 +138,55 @@ function UserPost() {
       <div className="text-center text-2xl text-slate-300">Loading...</div>
     );
 
-  if (posts.length == 0)
-    return (
-      <div className="text-center text-2xl text-slate-300">
-        You have no post
-      </div>
-    );
+  const alert = createRef<any>();
+
+  const deletePost = (id: Types.ObjectId, title: string) => {
+    alert.current
+      .fire({
+        title: "Are you sure to delete",
+        description: title,
+        showConfirm: true,
+      })
+      .then((confirm: boolean) => {
+        if (!confirm) return;
+        setDeleting(true);
+        fetch(`/api/post/${id}`, {
+          method: "DELETE",
+          headers: {
+            authorization: `Bearer ${localStorage.getItem("token")}`,
+          },
+        }).then((res) => {
+          setDeleting(false);
+          if (res.status == 200) {
+            getPosts();
+            return;
+          }
+          window.alert("Fail");
+        });
+      });
+  };
 
   const postList = posts.map((post) => (
     <li key={post._id.toString()} className="border-b border-b-slate-300 py-3">
-      <h3 className="text-lg">{post.title}</h3>
-      <p className="text-slate-500">{post.description}</p>
+      <div className="flex items-center px-3">
+        <div className="flex-1 pr-3">
+          <h3 className="text-lg">{post.title}</h3>
+          <p className="text-slate-500">{post.description}</p>
+        </div>
+        <div className="flex-none">
+          <Button variants="warning" className="text-xl mr-3" title="Edit">
+            <FaPencilAlt />
+          </Button>
+          <Button
+            variants="danger"
+            className="text-xl"
+            title="Delete"
+            onClick={() => deletePost(post._id, post.title)}
+          >
+            <FaTrashAlt />
+          </Button>
+        </div>
+      </div>
     </li>
   ));
 
@@ -159,7 +201,18 @@ function UserPost() {
           <AddPostForm setShowModal={setShowModal} getPost={getPosts} />
         </div>
       </Modal>
+      {posts.length == 0 && (
+        <div className="text-center text-2xl text-slate-300">
+          You have no post
+        </div>
+      )}
       <ul>{postList}</ul>
+      <Alert ref={alert} />
+      {isDeleting && (
+        <div className="fixed top-0 left-0 bottom-0 bg-black/50 right-0 flex flex-col items-center justify-center">
+          <span className="text-2xl animate-pulse text-white">Deleting</span>
+        </div>
+      )}
     </div>
   );
 }

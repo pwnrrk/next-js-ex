@@ -1,11 +1,9 @@
 import { NextApiRequest, NextApiResponse } from "next";
 import { verifyToken } from "../../../util/jwt";
 import Post from "../../../models/post";
+import { connectToDatabase } from "../../../util/mongodb";
 
-export default function handler(
-  request: NextApiRequest,
-  response: NextApiResponse
-) {
+const save = (request: NextApiRequest, response: NextApiResponse) => {
   verifyToken(request, response, async (request, response) => {
     const body = JSON.parse(request.body);
     const post = {
@@ -14,10 +12,22 @@ export default function handler(
       author_id: body.user.user_id,
     };
     try {
+      await connectToDatabase();
       await Post.create(post);
       response.json({ status: "ok", message: "saved!" });
     } catch (error) {
       response.status(500).send("Internal Exception");
     }
   });
+};
+
+export default function handler(
+  request: NextApiRequest,
+  response: NextApiResponse
+) {
+  switch (request.method) {
+    case "POST":
+      save(request, response);
+      break;
+  }
 }
