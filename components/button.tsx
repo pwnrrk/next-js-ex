@@ -1,13 +1,8 @@
-import { MouseEventHandler, ReactNode } from "react";
+import { ButtonHTMLAttributes, ReactNode } from "react";
 
-type ButtonProps = {
+type ButtonProps = ButtonHTMLAttributes<any> & {
   children?: ReactNode;
-  className?: string;
-  onClick?: MouseEventHandler;
-  type?: "button" | "submit" | "reset";
   variants?: string;
-  disabled?: boolean;
-  title?: string;
 };
 
 const varaints: { [key: string]: string } = {

@@ -1,6 +1,5 @@
 import type { NextPage } from "next";
 import Link from "next/link";
-import Layout from "../components/layout";
 import Head from "next/head";
 import { useRouter } from "next/router";
 import { FormEvent, useState } from "react";
@@ -104,27 +103,25 @@ function LoginForm() {
 
 const Login: NextPage = () => {
   return (
-    <Layout>
-      <div className="max-w-lg mx-auto text-center">
-        <Head>
-          <title>Blogs</title>
-          <meta name="description" content="Blogs Test" />
-          <link rel="icon" href="/favicon.ico" />
-        </Head>
-        <main className="h-screen">
-          <div className="rounded-lg p-5 bg-slate-100 my-5">
-            <h1 className="text-3xl my-12 font-bold">Login</h1>
-            <LoginForm />
-            <div className="my-5">
-              New user?{" "}
-              <span className="text-blue-500 hover:text-blue-600 hover:underline">
-                <Link href="/register">Register</Link>
-              </span>{" "}
-            </div>
+    <div className="max-w-lg mx-auto text-center">
+      <Head>
+        <title>Blogs</title>
+        <meta name="description" content="Blogs Test" />
+        <link rel="icon" href="/favicon.ico" />
+      </Head>
+      <main className="h-screen">
+        <div className="rounded-lg p-5 bg-slate-100 my-5">
+          <h1 className="text-3xl my-12 font-bold">Login</h1>
+          <LoginForm />
+          <div className="my-5">
+            New user?{" "}
+            <span className="text-blue-500 hover:text-blue-600 hover:underline">
+              <Link href="/register">Register</Link>
+            </span>{" "}
           </div>
-        </main>
-      </div>
-    </Layout>
+        </div>
+      </main>
+    </div>
   );
 };
 

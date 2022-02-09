@@ -1,19 +1,18 @@
 import Link from "next/link";
 import { ReactNode, useEffect, useState } from "react";
-import useUser from "../util/useUser";
+import { userStore } from "../lib/hooks/user";
 
 type LayoutProps = {
   children: ReactNode;
 };
 
 function UserMenu() {
-  const getUser = useUser;
   const [isLoggedin, setLoggedIn] = useState(false);
   useEffect(() => {
-    getUser().then((res) => {
-      setLoggedIn(res.isLoggedin);
+    userStore().then(({ isLoggedin }) => {
+      setLoggedIn(isLoggedin);
     });
-  }, [getUser]);
+  });
   if (isLoggedin)
     return (
       <>

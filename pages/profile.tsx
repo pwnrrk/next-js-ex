@@ -1,9 +1,7 @@
 import { NextPage } from "next";
 import Head from "next/head";
-import Link from "next/link";
-import { createRef, FormEvent, useEffect, useState } from "react";
-import Layout from "../components/layout";
-import useUser from "../util/useUser";
+import React, { createRef, FormEvent, useEffect, useState } from "react";
+import { userStore } from "../lib/hooks/user";
 import { PostModel } from "../models/post";
 import Modal from "../components/modal";
 import Button from "../components/button";
@@ -11,77 +9,94 @@ import Input, { inputDefaultClass } from "../components/input";
 import { FaPencilAlt, FaTrashAlt } from "react-icons/fa";
 import Alert from "../components/alert";
 import { Types } from "mongoose";
+import { User } from "../models/user";
 
 function ProfileData() {
-  const [user, setUser] = useState(null);
-  const [isLoading, setLoading] = useState(false);
-  const [isLoggedin, setLoggedIn] = useState(false);
-  const getUser = useUser;
+  const [user, setUser] = useState<User | undefined>();
   useEffect(() => {
-    setLoading(true);
-    getUser().then((res) => {
-      setUser(res.user);
-      setLoggedIn(res.isLoggedin);
-      setLoading(false);
+    userStore().then(({ user }) => {
+      setUser(user);
     });
-  }, [getUser]);
-  if (isLoading)
+  }, []);
+  if (user)
     return (
-      <div className="text-center text-2xl text-slate-300">Loading...</div>
+      <div className="text-center text-2xl">Welcome {user["first_name"]}</div>
     );
-  if (!isLoggedin)
-    return (
-      <div className="text-center text-2xl text-slate-300">
-        Please <Link href="/login">Login</Link>
-      </div>
-    );
-  return (
-    <div className="text-center text-2xl">
-      Welcome {user ? user["first_name"] : ""}
-    </div>
-  );
+  return <></>;
 }
 
-type AddPostFormProps = {
-  setShowModal: CallableFunction;
-  getPost: CallableFunction;
+const defaultPostData: PostModel = {
+  title: "",
+  description: "",
 };
 
-function AddPostForm({ setShowModal, getPost }: AddPostFormProps) {
+type Action = "POST" | "PUT";
+
+type AddPostFormProps = {
+  hideModal: CallableFunction;
+  getPost: CallableFunction;
+  actionType: Action;
+  postData: PostModel;
+  resetPost: CallableFunction;
+};
+
+const AddPostForm = ({
+  getPost,
+  hideModal,
+  actionType,
+  postData,
+  resetPost,
+}: AddPostFormProps) => {
   const [isLoading, setLoading] = useState(false);
+  const [title, setTitle] = useState("");
+  const [description, setDescription] = useState("");
+
+  useEffect(() => {
+    setTitle(postData.title);
+    setDescription(postData.description);
+  }, [postData]);
+
   const savePost = async (event: FormEvent) => {
     event.preventDefault();
-    const postData = {
-      title: (document.getElementById("title-input") as HTMLInputElement).value,
-      description: (
-        document.getElementById("description-input") as HTMLInputElement
-      ).value,
-    };
+    const body = postData;
+    body.title = title;
+    body.description = description;
     setLoading(true);
     const response = await fetch("/api/post", {
       headers: {
         authorization: `Bearer ${localStorage.getItem("token")}`,
       },
-      body: JSON.stringify(postData),
-      method: "POST",
+      body: JSON.stringify(body),
+      method: actionType,
     });
     setLoading(false);
     if (response.status == 200) {
+      resetForm();
       getPost();
-      setShowModal(false);
-      return alert("Post save successfuly");
+      alert("Post save successfuly");
+      return;
     }
     alert("Save fail");
   };
+
+  const resetForm = () => {
+    resetPost();
+    setTitle("");
+    setDescription("");
+    hideModal();
+  };
+
   return (
     <div className="relative">
-      <form onSubmit={savePost} onReset={() => setShowModal(false)}>
+      <form onSubmit={savePost} onReset={resetForm}>
         <div className="my-3">
           <Input
             type="text"
             name="title"
             id="title-input"
             placeholder="Title"
+            value={title}
+            onChange={(event) => setTitle(event.target.value)}
           />
         </div>
         <div className="my-3">
@@ -92,6 +107,8 @@ function AddPostForm({ setShowModal, getPost }: AddPostFormProps) {
             maxLength={300}
             style={{ resize: "none" }}
             placeholder="Description"
+            value={description}
+            onChange={(event) => setDescription(event.target.value)}
           ></textarea>
         </div>
         <div className="text-right">
@@ -108,13 +125,17 @@ function AddPostForm({ setShowModal, getPost }: AddPostFormProps) {
       )}
     </div>
   );
-}
+};
 
 function UserPost() {
-  const [posts, setPosts] = useState(new Array<PostModel>());
+  const [posts, setPosts] = useState<PostModel[]>([]);
   const [isLoading, setLoading] = useState(false);
-  const [showModal, setShowModal] = useState(false);
   const [isDeleting, setDeleting] = useState(false);
+  const [showModal, setShowModal] = useState(false);
+  const [postToEdit, setPostToEdit] = useState<PostModel>(defaultPostData);
+  const [formAction, setFormAction] = useState<Action>("POST");
+
+  const alert = createRef<any>();
 
   const getPosts = async () => {
     setLoading(true);
@@ -125,56 +146,63 @@ function UserPost() {
       },
     });
     const data = await response.json();
-    setPosts(data);
     setLoading(false);
+    setPosts(data);
   };
 
-  useEffect(() => {
-    getPosts();
-  }, []);
-
-  if (isLoading)
-    return (
-      <div className="text-center text-2xl text-slate-300">Loading...</div>
-    );
-
-  const alert = createRef<any>();
-
-  const deletePost = (id: Types.ObjectId, title: string) => {
-    alert.current
-      .fire({
-        title: "Are you sure to delete",
-        description: title,
-        showConfirm: true,
-      })
-      .then((confirm: boolean) => {
-        if (!confirm) return;
-        setDeleting(true);
-        fetch(`/api/post/${id}`, {
-          method: "DELETE",
-          headers: {
-            authorization: `Bearer ${localStorage.getItem("token")}`,
-          },
-        }).then((res) => {
-          setDeleting(false);
-          if (res.status == 200) {
-            getPosts();
-            return;
-          }
-          window.alert("Fail");
-        });
-      });
+  const deletePost = async (id: Types.ObjectId | undefined, title: string) => {
+    const confirm = await alert.current.fire({
+      title: "Are you sure to delete",
+      description: title,
+      showConfirm: true,
+    });
+    if (!confirm) return;
+    setDeleting(true);
+    const response = await fetch(`/api/post/${id}`, {
+      method: "DELETE",
+      headers: {
+        authorization: `Bearer ${localStorage.getItem("token")}`,
+      },
+    });
+    setDeleting(false);
+    if (response.status == 200) {
+      getPosts();
+      return;
+    }
+    window.alert("Fail");
   };
+
+  const add = () => {
+    setShowModal(true);
+    setFormAction("POST");
+  };
+
+  const update = (postData: PostModel) => {
+    setShowModal(true);
+    setPostToEdit(postData);
+    setFormAction("PUT");
+  };
+
+  const hideModal = () => {
+    setShowModal(false);
+  };
+
+  const resetPostToEdit = () => setPostToEdit(defaultPostData);
 
   const postList = posts.map((post) => (
-    <li key={post._id.toString()} className="border-b border-b-slate-300 py-3">
+    <li key={post._id?.toString()} className="border-b border-b-slate-300 py-3">
       <div className="flex items-center px-3">
         <div className="flex-1 pr-3">
           <h3 className="text-lg">{post.title}</h3>
           <p className="text-slate-500">{post.description}</p>
         </div>
         <div className="flex-none">
-          <Button variants="warning" className="text-xl mr-3" title="Edit">
+          <Button
+            variants="warning"
+            onClick={() => update(post)}
+            className="text-xl mr-3"
+            title="Edit"
+          >
             <FaPencilAlt />
           </Button>
           <Button
@@ -190,15 +218,27 @@ function UserPost() {
     </li>
   ));
 
+  useEffect(() => {
+    getPosts();
+  }, []);
+
+  if (isLoading) return <></>;
+
   return (
     <div>
       <div className="text-right">
-        <Button onClick={() => setShowModal(true)}>Add Post</Button>
+        <Button onClick={() => add()}>Add Post</Button>
       </div>
       <h3 className="text-xl font-medium">Posts</h3>
       <Modal setShowModal={setShowModal} showing={showModal}>
         <div className="rounded bg-white max-w-lg mx-auto my-5 p-5">
-          <AddPostForm setShowModal={setShowModal} getPost={getPosts} />
+          <AddPostForm
+            getPost={getPosts}
+            hideModal={hideModal}
+            postData={postToEdit}
+            resetPost={resetPostToEdit}
+            actionType={formAction}
+          />
         </div>
       </Modal>
       {posts.length == 0 && (
@@ -219,23 +259,21 @@ function UserPost() {
 
 const Profile: NextPage = () => {
   return (
-    <Layout>
-      <div className="p-5">
-        <Head>
-          <title>Blogs</title>
-          <meta name="description" content="Blogs Test" />
-          <link rel="icon" href="/favicon.ico" />
-        </Head>
-        <main className="h-screen">
-          <div className="rounded-lg p-5 bg-slate-100 my-5">
-            <ProfileData />
-          </div>
-          <div className="rounded-lg p-5 bg-slate-100 my-5">
-            <UserPost />
-          </div>
-        </main>
-      </div>
-    </Layout>
+    <div className="p-5">
+      <Head>
+        <title>Blogs</title>
+        <meta name="description" content="Blogs Test" />
+        <link rel="icon" href="/favicon.ico" />
+      </Head>
+      <main className="h-screen">
+        <div className="rounded-lg p-5 bg-slate-100 my-5">
+          <ProfileData />
+        </div>
+        <div className="rounded-lg p-5 bg-slate-100 my-5">
+          <UserPost />
+        </div>
+      </main>
+    </div>
   );
 };
 export default Profile;

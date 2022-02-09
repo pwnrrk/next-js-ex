@@ -1,5 +1,4 @@
 import type { NextPage } from "next";
-import Layout from "../components/layout";
 import Head from "next/head";
 import Input from "../components/input";
 import Button from "../components/button";
@@ -99,8 +98,8 @@ const RegisterForm = () => {
           id="password-input"
           name="password"
           placeholder="Password"
-          minlength={8}
-          maxlength={16}
+          minLength={8}
+          maxLength={16}
           required
         />
       </div>
@@ -110,8 +109,8 @@ const RegisterForm = () => {
           id="confirm-password-input"
           name="confirm-password"
           placeholder="Confirm Password"
-          minlength={8}
-          maxlength={16}
+          minLength={8}
+          maxLength={16}
           required
         />
       </div>
@@ -134,27 +133,25 @@ const RegisterForm = () => {
 
 const Register: NextPage = () => {
   return (
-    <Layout>
-      <div className="max-w-lg mx-auto text-center">
-        <Head>
-          <title>Blogs</title>
-          <meta name="description" content="Blogs Test" />
-          <link rel="icon" href="/favicon.ico" />
-        </Head>
-        <main className="h-screen">
-          <div className="rounded-lg p-5 bg-slate-100 my-5">
-            <h1 className="text-3xl my-12 font-bold">Register</h1>
-            <RegisterForm />
-            <div className="my-5">
-              Already register?{" "}
-              <span className="text-blue-500 hover:text-blue-600 hover:underline">
-                <Link href="/login">Login</Link>
-              </span>{" "}
-            </div>
+    <div className="max-w-lg mx-auto text-center">
+      <Head>
+        <title>Blogs</title>
+        <meta name="description" content="Blogs Test" />
+        <link rel="icon" href="/favicon.ico" />
+      </Head>
+      <main className="h-screen">
+        <div className="rounded-lg p-5 bg-slate-100 my-5">
+          <h1 className="text-3xl my-12 font-bold">Register</h1>
+          <RegisterForm />
+          <div className="my-5">
+            Already register?{" "}
+            <span className="text-blue-500 hover:text-blue-600 hover:underline">
+              <Link href="/login">Login</Link>
+            </span>{" "}
           </div>
-        </main>
-      </div>
-    </Layout>
+        </div>
+      </main>
+    </div>
   );
 };
 

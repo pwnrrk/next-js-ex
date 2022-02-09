@@ -1,4 +1,13 @@
-import { Schema, model, models } from "mongoose";
+import { Schema, model, models, Types } from "mongoose";
+
+export interface User {
+  _id?: Types.ObjectId;
+  first_name?: string;
+  last_name?: string;
+  email?: string;
+  password?: string;
+  token?: string;
+}
 
 const userSchema = new Schema({
   first_name: { type: String, default: null },
