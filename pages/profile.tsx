@@ -9,7 +9,7 @@ import Input, { inputDefaultClass } from "../components/input";
 import { FaPencilAlt, FaTrashAlt } from "react-icons/fa";
 import Alert from "../components/alert";
 import { Types } from "mongoose";
-import { User } from "../models/user";
+import { UserModel as User } from "../models/user";
 
 function ProfileData() {
   const [user, setUser] = useState<User | undefined>();
@@ -150,6 +150,10 @@ function UserPost() {
     setPosts(data);
   };
 
+  useEffect(() => {
+    getPosts();
+  }, []);
+
   const deletePost = async (id: Types.ObjectId | undefined, title: string) => {
     const confirm = await alert.current.fire({
       title: "Are you sure to delete",
@@ -217,10 +221,6 @@ function UserPost() {
       </div>
     </li>
   ));
-
-  useEffect(() => {
-    getPosts();
-  }, []);
 
   if (isLoading) return <></>;
 

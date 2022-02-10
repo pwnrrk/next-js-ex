@@ -1,8 +1,8 @@
-import type { User } from "../../models/user";
+import type { UserModel } from "../../models/user";
 
 type UserStore = {
   isLoggedin: boolean;
-  user?: User;
+  user?: UserModel;
 };
 
 export async function userStore() {

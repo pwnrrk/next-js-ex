@@ -1,6 +1,6 @@
 import { Schema, model, models, Types } from "mongoose";
 
-export interface User {
+export interface UserModel {
   _id?: Types.ObjectId;
   first_name?: string;
   last_name?: string;

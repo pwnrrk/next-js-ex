@@ -6,7 +6,8 @@ export interface PostModel {
   title: string;
   description: string;
   author_id?: Types.ObjectId;
-  timestamps?: string;
+  createdAt?: string;
+  updatedAt?: string;
 }
 
 const postSchema = new Schema(

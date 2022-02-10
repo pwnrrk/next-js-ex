@@ -1,6 +1,13 @@
 import { NextApiRequest, NextApiResponse } from "next";
 
-export type MethodHandler = { [key: string]: CallableFunction };
+export type MethodHandler = {
+  [key: string]: (request: NextApiRequest, response: NextApiResponse) => any;
+};
+
+export function errorHandler(error: any, response: NextApiResponse) {
+  console.trace(error);
+  response.status(500).send("Internal Exception");
+}
 
 function apiHandler(
   request: NextApiRequest,
