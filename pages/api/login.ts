@@ -3,19 +3,11 @@ import jwt from "jsonwebtoken";
 import bcrypt from "bcryptjs";
 import User from "../../models/user";
 import { connectToDatabase } from "../../util/mongodb";
+import apiHandler, { MethodHandler } from "../../util/apiHandler";
 
-type Data = {
-  status: String;
-  message: String;
-  data?: Object;
-};
-
-export default async function handler(
-  request: NextApiRequest,
-  response: NextApiResponse<Data>
-) {
-  await connectToDatabase();
-  try {
+const methodHandler: MethodHandler = {
+  async POST(request, response) {
+    await connectToDatabase();
     const { email, password } = request.body;
     const user = await User.findOne({ email: email });
     if (!user)
@@ -34,7 +26,12 @@ export default async function handler(
     );
     user.token = token;
     response.json({ status: "ok", message: "success", data: user });
-  } catch (error) {
-    console.trace(error);
-  }
+  },
+};
+
+export default async function handler(
+  request: NextApiRequest,
+  response: NextApiResponse
+) {
+  return apiHandler(request, response, methodHandler);
 }

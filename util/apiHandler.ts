@@ -9,15 +9,43 @@ export function errorHandler(error: any, response: NextApiResponse) {
   response.status(500).send("Internal Exception");
 }
 
+function isPromise(p: any) {
+  if (typeof p === "object" && typeof p.then === "function") {
+    return true;
+  }
+  return false;
+}
+
 function apiHandler(
   request: NextApiRequest,
   response: NextApiResponse,
   methodHandler: MethodHandler
 ) {
-  const method = request.method?.toUpperCase();
-  if (method) {
-    methodHandler[method](request, response);
-  }
+  return new Promise((resolve) => {
+    try {
+      const method = request.method;
+      if (method) {
+        const func = methodHandler[method.toUpperCase()];
+        if (func) {
+          const call = func(request, response);
+          if (call && isPromise(call)) {
+            call.then(() => resolve(null));
+          } else {
+            resolve(null);
+          }
+        } else {
+          response.status(404).send("Not found");
+          resolve(null);
+        }
+      } else {
+        response.status(404).send("Not found");
+        resolve(null);
+      }
+    } catch (error) {
+      errorHandler(error, response);
+      resolve(null);
+    }
+  });
 }
 
 export default apiHandler;

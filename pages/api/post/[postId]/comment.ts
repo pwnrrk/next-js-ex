@@ -31,24 +31,19 @@ const methodHandler: MethodHandler = {
       errorHandler(error, response);
     }
   },
-  POST(request, response) {
-    verifyToken(request, response, async (req, res) => {
-      try {
-        const body = JSON.parse(req.body);
-        const { user } = body;
-        const { postId } = req.query;
-        const { content } = body;
-        await connectToDatabase();
-        const comment = await Comment.create({
-          post_id: new Types.ObjectId(postId.toString()),
-          content,
-          user_id: user.user_id,
-        });
-        res.json(comment);
-      } catch (error) {
-        errorHandler(error, response);
-      }
+  async POST(request, response) {
+    const user = verifyToken(request, response);
+    if (!user) return;
+    const body = JSON.parse(request.body);
+    const { postId } = request.query;
+    const { content } = body;
+    await connectToDatabase();
+    const comment = await Comment.create({
+      post_id: new Types.ObjectId(postId.toString()),
+      content,
+      user_id: user.user_id,
     });
+    response.json(comment);
   },
 };
 
@@ -56,5 +51,5 @@ export default function handler(
   request: NextApiRequest,
   response: NextApiResponse
 ) {
-  apiHandler(request, response, methodHandler);
+  return apiHandler(request, response, methodHandler);
 }

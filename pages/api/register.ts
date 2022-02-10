@@ -3,18 +3,10 @@ import jwt from "jsonwebtoken";
 import bcrypt from "bcryptjs";
 import User from "../../models/user";
 import { connectToDatabase } from "../../util/mongodb";
+import apiHandler, { MethodHandler } from "../../util/apiHandler";
 
-type Data = {
-  status: String;
-  message: String;
-  data?: Object;
-};
-
-export default async function handler(
-  request: NextApiRequest,
-  response: NextApiResponse<Data>
-) {
-  try {
+const methodHandler: MethodHandler = {
+  async POST(request, response) {
     await connectToDatabase();
     const userData = request.body;
     const oldUser = await User.findOne({ email: userData.email });
@@ -43,7 +35,12 @@ export default async function handler(
       message: "saved!",
       data: user,
     });
-  } catch (error) {
-    console.log(error);
-  }
+  },
+};
+
+export default function handler(
+  request: NextApiRequest,
+  response: NextApiResponse
+) {
+  return apiHandler(request, response, methodHandler);
 }
