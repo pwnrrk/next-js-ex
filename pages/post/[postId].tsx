@@ -42,6 +42,7 @@ const Post: NextPage = () => {
 
   const postComment = async (event: FormEvent) => {
     event.preventDefault();
+    if (!commentToPost || /^\s*$/.test(commentToPost)) return;
     setSendingComment(true);
     const response = await fetch(`/api/post/${postId}/comment`, {
       method: "POST",
