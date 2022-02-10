@@ -16,7 +16,7 @@ const varaints: { [key: string]: string } = {
     "bg-yellow-500 disabled:bg-yellow-300 hover:bg-yellow-600 active:bg-yellow-700 focus:outline-none focus:ring focus:ring-yellow-300",
 };
 
-export default function Button(props: ButtonProps) {
+const Button = (props: ButtonProps) => {
   const variant = varaints[props.variants || "primary"];
   return (
     <button
@@ -24,4 +24,5 @@ export default function Button(props: ButtonProps) {
       className={`${props.className} transition ease-out rounded px-3 py-1 text-white ${variant}`}
     ></button>
   );
-}
+};
+export default Button;

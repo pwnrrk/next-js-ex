@@ -1,7 +1,7 @@
-import { NextApiRequest, NextApiResponse } from "next";
+import { NextApiHandler, NextApiRequest, NextApiResponse } from "next";
 
 export type MethodHandler = {
-  [key: string]: (request: NextApiRequest, response: NextApiResponse) => any;
+  [key: string]: NextApiHandler;
 };
 
 export function errorHandler(error: any, response: NextApiResponse) {

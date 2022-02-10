@@ -8,12 +8,12 @@ type ModalProps = {
   clicToClose?: boolean;
 };
 
-export default function Modal({
+const Modal = ({
   children,
   showing,
   setShowModal,
   clicToClose,
-}: ModalProps) {
+}: ModalProps) => {
   const self = React.createRef<HTMLDivElement>();
   const outsideClick = (event: MouseEvent) => {
     if (event.target == self.current && clicToClose) {
@@ -42,4 +42,5 @@ export default function Modal({
       </div>
     </CSSTransition>
   );
-}
+};
+export default Modal;

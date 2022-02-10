@@ -41,7 +41,7 @@ const methodHandler: MethodHandler = {
   async GET(request, response) {
     try {
       await connectToDatabase();
-      const posts = await Post.find().limit(10);
+      const posts = await Post.find().limit(10).sort({ createdAt: "desc" });
       response.json(posts);
     } catch (error) {
       errorHandler(error, response);
