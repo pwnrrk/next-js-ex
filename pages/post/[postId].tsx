@@ -1,3 +1,4 @@
+import { Types } from "mongoose";
 import { NextPage } from "next";
 import { useRouter } from "next/router";
 import { FormEvent, useEffect, useState } from "react";
@@ -17,6 +18,7 @@ const Post: NextPage = () => {
   const [user, setUser] = useState<UserModel>();
   const [commentToPost, setCommentToPost] = useState("");
   const [isSendingComment, setSendingComment] = useState(false);
+  const [isDeletingComment, setDeletingComment] = useState(false);
 
   useEffect(() => {
     fetch(`/api/post/${postId}`)
@@ -29,7 +31,7 @@ const Post: NextPage = () => {
     fetch(`/api/post/${postId}/comment`)
       .then((res) => res.json())
       .then((data) => setComments(data));
-  }, [postId, isSendingComment]);
+  }, [postId, isSendingComment, isDeletingComment]);
 
   const getDateString = (date: string | undefined) => {
     if (date)
@@ -55,6 +57,17 @@ const Post: NextPage = () => {
     }
   };
 
+  const deleteComment = async (id: Types.ObjectId) => {
+    setDeletingComment(true);
+    await fetch(`/api/comment/${id}`, {
+      method: "DELETE",
+      headers: {
+        authorization: `Bearer ${localStorage.getItem("token")}`,
+      },
+    });
+    setDeletingComment(false);
+  };
+
   const commentList = comments?.map((comment) => (
     <li
       key={comment.comment._id.toString()}
@@ -64,6 +77,14 @@ const Post: NextPage = () => {
         {comment.user?.first_name} {comment.user?.last_name}
       </div>
       <p className="text-s p-1">{comment.comment.content}</p>
+      {user?._id?.toString() === comment.user._id?.toString() && (
+        <button
+          className="text-xs text-slate-500"
+          onClick={() => deleteComment(comment.comment._id)}
+        >
+          Delete
+        </button>
+      )}
     </li>
   ));
 
