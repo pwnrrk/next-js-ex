@@ -12,9 +12,11 @@ const methodHandler: MethodHandler = {
     if (!user) return;
     const { postId } = request.query;
     await connectToDatabase();
-    await Post.findOneAndRemove({
-      _id: new Types.ObjectId(postId.toString()),
-    });
+    const post = (await Post.findById(
+      new Types.ObjectId(postId.toString())
+    )) as PostModel;
+    if (user.user_id.toString() !== post.author_id?.toString()) return;
+    await Post.findByIdAndRemove(post._id);
     response.json({ status: "ok", message: "deleted!" });
   },
   async GET(request, response) {

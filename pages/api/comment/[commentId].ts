@@ -19,9 +19,7 @@ export default function handler(
         new Types.ObjectId(commentId.toString())
       )) as CommentModel;
       if (user.user_id.toString() !== comment.user_id.toString()) return;
-      await Comment.findOneAndRemove({
-        _id: comment._id,
-      });
+      await Comment.findByIdAndRemove(comment._id);
       response.json({ status: "ok", message: "Comment deleted" });
     },
   });
