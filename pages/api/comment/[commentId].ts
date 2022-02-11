@@ -18,7 +18,7 @@ export default function handler(
       const comment = (await Comment.findById(
         new Types.ObjectId(commentId.toString())
       )) as CommentModel;
-      if (!user.user_id.equals(comment.user_id)) return;
+      if (user.user_id.toString() !== comment.user_id.toString()) return;
       await Comment.findOneAndRemove({
         _id: comment._id,
       });
