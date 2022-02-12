@@ -1,7 +1,7 @@
 import { NextPage } from "next";
 import Head from "next/head";
 import React, { createRef, FormEvent, useEffect, useState } from "react";
-import { userStore } from "../lib/hooks/user";
+import { userStore } from "../util/user";
 import { PostModel } from "../models/post";
 import Modal from "../components/modal";
 import Button from "../components/button";

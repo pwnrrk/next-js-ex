@@ -4,7 +4,7 @@ import { useRouter } from "next/router";
 import { FormEvent, useEffect, useState } from "react";
 import Button from "../../components/button";
 import { inputDefaultClass } from "../../components/input";
-import { userStore } from "../../lib/hooks/user";
+import { userStore } from "../../util/user";
 import { CommentModel } from "../../models/comment";
 import { PostModel } from "../../models/post";
 import { UserModel } from "../../models/user";
