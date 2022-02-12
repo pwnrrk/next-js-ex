@@ -139,8 +139,8 @@ const Register: NextPage = () => {
         <meta name="description" content="Blogs Test" />
         <link rel="icon" href="/favicon.ico" />
       </Head>
-      <main className="h-screen">
-        <div className="rounded-lg p-5 bg-slate-100 my-5">
+      <main className="h-screen px-3">
+        <div className="rounded-lg p-3 bg-slate-100 my-5">
           <h1 className="text-3xl my-12 font-bold">Register</h1>
           <RegisterForm />
           <div className="my-5">

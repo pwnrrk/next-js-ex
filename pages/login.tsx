@@ -76,7 +76,7 @@ function LoginForm() {
           id="email-input"
           autoComplete="email"
           className={
-            "rounded-none rounded-tr rounded-tl pt-3 pb-3 " +
+            "rounded-b-none rounded-tr rounded-tl pt-3 pb-3 " +
             noUserError()?.class
           }
           type="email"
@@ -88,7 +88,7 @@ function LoginForm() {
           name="password"
           id="password-input"
           className={
-            "rounded-none rounded-br rounded-bl border-t-0 pt-3 pb-3 " +
+            "rounded-t-none rounded-br rounded-bl border-t-0 pt-3 pb-3 " +
             passwordIncorrectError()?.class
           }
           type="password"
@@ -109,8 +109,8 @@ const Login: NextPage = () => {
         <meta name="description" content="Blogs Test" />
         <link rel="icon" href="/favicon.ico" />
       </Head>
-      <main className="h-screen">
-        <div className="rounded-lg p-5 bg-slate-100 my-5">
+      <main className="h-screen px-3">
+        <div className="rounded-lg p-3 bg-slate-100 my-5">
           <h1 className="text-3xl my-12 font-bold">Login</h1>
           <LoginForm />
           <div className="my-5">

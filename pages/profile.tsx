@@ -231,14 +231,16 @@ function UserPost() {
       </div>
       <h3 className="text-xl font-medium">Posts</h3>
       <Modal setShowModal={setShowModal} showing={showModal}>
-        <div className="rounded bg-white max-w-lg mx-auto my-5 p-5">
-          <AddPostForm
-            getPost={getPosts}
-            hideModal={hideModal}
-            postData={postToEdit}
-            resetPost={resetPostToEdit}
-            actionType={formAction}
-          />
+        <div className="px-1">
+          <div className="rounded bg-white max-w-lg mx-auto my-5 p-5">
+            <AddPostForm
+              getPost={getPosts}
+              hideModal={hideModal}
+              postData={postToEdit}
+              resetPost={resetPostToEdit}
+              actionType={formAction}
+            />
+          </div>
         </div>
       </Modal>
       {posts.length == 0 && (
