@@ -1,7 +1,7 @@
 import type { NextPage } from "next";
 import Head from "next/head";
 import { useEffect, useState } from "react";
-import { PostModel } from "../models/post";
+import { PostModel } from "models/post";
 import Link from "next/link";
 
 const Home: NextPage = () => {

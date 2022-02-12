@@ -1,9 +1,9 @@
 import type { NextApiRequest, NextApiResponse } from "next";
 import jwt from "jsonwebtoken";
 import bcrypt from "bcryptjs";
-import User from "../../models/user";
-import { connectToDatabase } from "../../util/mongodb";
-import apiHandler, { MethodHandler } from "../../util/apiHandler";
+import User from "models/user";
+import { connectToDatabase } from "util/mongodb";
+import apiHandler, { MethodHandler } from "util/apiHandler";
 
 const methodHandler: MethodHandler = {
   async POST(request, response) {

@@ -1,8 +1,8 @@
 import type { NextApiRequest, NextApiResponse } from "next";
-import { verifyToken } from "../../../util/jwt";
-import Comment, { CommentModel } from "../../../models/comment";
-import apiHandler from "../../../util/apiHandler";
-import { connectToDatabase } from "../../../util/mongodb";
+import { verifyToken } from "util/jwt";
+import Comment, { CommentModel } from "models/comment";
+import apiHandler from "util/apiHandler";
+import { connectToDatabase } from "util/mongodb";
 import { Types } from "mongoose";
 
 export default function handler(

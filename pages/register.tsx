@@ -1,7 +1,7 @@
 import type { NextPage } from "next";
 import Head from "next/head";
-import Input from "../components/input";
-import Button from "../components/button";
+import Input from "components/input";
+import Button from "components/button";
 import Link from "next/link";
 import { FormEvent, useState } from "react";
 import { useRouter } from "next/router";

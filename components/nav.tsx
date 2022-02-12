@@ -1,6 +1,6 @@
 import Link from "next/link";
 import { useState, useEffect } from "react";
-import { userStore } from "../util/user";
+import { userStore } from "util/user";
 
 function UserMenu() {
   const [isLoggedin, setLoggedIn] = useState(false);

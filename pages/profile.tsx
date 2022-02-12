@@ -1,15 +1,15 @@
 import { NextPage } from "next";
 import Head from "next/head";
 import React, { createRef, FormEvent, useEffect, useState } from "react";
-import { userStore } from "../util/user";
-import { PostModel } from "../models/post";
-import Modal from "../components/modal";
-import Button from "../components/button";
-import Input, { inputDefaultClass } from "../components/input";
+import { userStore } from "util/user";
+import { PostModel } from "models/post";
+import Modal from "components/modal";
+import Button from "components/button";
+import Input, { inputDefaultClass } from "components/input";
 import { FaPencilAlt, FaTrashAlt } from "react-icons/fa";
-import Alert from "../components/alert";
+import Alert from "components/alert";
 import { Types } from "mongoose";
-import { UserModel as User } from "../models/user";
+import { UserModel as User } from "models/user";
 
 function ProfileData() {
   const [user, setUser] = useState<User | undefined>();

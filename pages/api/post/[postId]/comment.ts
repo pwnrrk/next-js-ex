@@ -1,13 +1,10 @@
 import { NextApiRequest, NextApiResponse } from "next";
-import { verifyToken } from "../../../../util/jwt";
-import Comment from "../../../../models/comment";
-import apiHandler, {
-  errorHandler,
-  MethodHandler,
-} from "../../../../util/apiHandler";
-import { connectToDatabase } from "../../../../util/mongodb";
+import { verifyToken } from "util/jwt";
+import Comment from "models/comment";
+import apiHandler, { errorHandler, MethodHandler } from "util/apiHandler";
+import { connectToDatabase } from "util/mongodb";
 import { Types } from "mongoose";
-import User from "../../../../models/user";
+import User from "models/user";
 
 const methodHandler: MethodHandler = {
   async GET(request, response) {

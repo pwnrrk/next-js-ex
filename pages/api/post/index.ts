@@ -1,8 +1,8 @@
 import { NextApiRequest, NextApiResponse } from "next";
-import { verifyToken } from "../../../util/jwt";
-import Post from "../../../models/post";
-import { connectToDatabase } from "../../../util/mongodb";
-import apiHandler, { MethodHandler } from "../../../util/apiHandler";
+import { verifyToken } from "util/jwt";
+import Post from "models/post";
+import { connectToDatabase } from "util/mongodb";
+import apiHandler, { MethodHandler } from "util/apiHandler";
 
 const methodHandler: MethodHandler = {
   async POST(request, response) {

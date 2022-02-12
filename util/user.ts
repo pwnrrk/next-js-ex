@@ -1,4 +1,4 @@
-import type { UserModel } from "../../models/user";
+import type { UserModel } from "models/user";
 
 type UserStore = {
   isLoggedin: boolean;

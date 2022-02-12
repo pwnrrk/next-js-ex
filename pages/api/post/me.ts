@@ -1,8 +1,8 @@
 import { NextApiRequest, NextApiResponse } from "next";
-import Post from "../../../models/post";
-import apiHandler from "../../../util/apiHandler";
-import { verifyToken } from "../../../util/jwt";
-import { connectToDatabase } from "../../../util/mongodb";
+import Post from "models/post";
+import apiHandler from "util/apiHandler";
+import { verifyToken } from "util/jwt";
+import { connectToDatabase } from "util/mongodb";
 
 export default function handler(
   request: NextApiRequest,

@@ -3,8 +3,8 @@ import Link from "next/link";
 import Head from "next/head";
 import { useRouter } from "next/router";
 import { FormEvent, useState } from "react";
-import Button from "../components/button";
-import Input from "../components/input";
+import Button from "components/button";
+import Input from "components/input";
 
 type LoginButtonProps = {
   isLoading: boolean;

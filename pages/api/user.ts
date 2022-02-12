@@ -1,8 +1,8 @@
 import type { NextApiRequest, NextApiResponse } from "next";
-import User, { UserModel } from "../../models/user";
-import apiHandler, { MethodHandler } from "../../util/apiHandler";
-import { verifyToken } from "../../util/jwt";
-import { connectToDatabase } from "../../util/mongodb";
+import User, { UserModel } from "models/user";
+import apiHandler, { MethodHandler } from "util/apiHandler";
+import { verifyToken } from "util/jwt";
+import { connectToDatabase } from "util/mongodb";
 
 const methodHandler: MethodHandler = {
   async GET(request, response) {

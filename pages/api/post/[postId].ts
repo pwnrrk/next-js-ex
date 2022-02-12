@@ -1,10 +1,10 @@
 import { NextApiRequest, NextApiResponse } from "next";
-import { verifyToken } from "../../../util/jwt";
-import Post, { PostModel } from "../../../models/post";
-import { connectToDatabase } from "../../../util/mongodb";
+import { verifyToken } from "util/jwt";
+import Post, { PostModel } from "models/post";
+import { connectToDatabase } from "util/mongodb";
 import { Types } from "mongoose";
-import apiHandler, { MethodHandler } from "../../../util/apiHandler";
-import User, { UserModel } from "../../../models/user";
+import apiHandler, { MethodHandler } from "util/apiHandler";
+import User, { UserModel } from "models/user";
 
 const methodHandler: MethodHandler = {
   async DELETE(request, response) {
