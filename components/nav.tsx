@@ -1,15 +1,9 @@
 import Link from "next/link";
-import { useState, useEffect } from "react";
-import { userStore } from "util/user";
+import useUser from "util/user";
 
 function UserMenu() {
-  const [isLoggedin, setLoggedIn] = useState(false);
-  useEffect(() => {
-    userStore().then(({ isLoggedin }) => {
-      setLoggedIn(isLoggedin);
-    });
-  });
-  if (isLoggedin)
+  const user = useUser();
+  if (user.user)
     return (
       <>
         <div className="flex-none hover:text-blue-500 px-3">

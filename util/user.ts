@@ -1,27 +1,26 @@
 import type { UserModel } from "models/user";
+import useSWR from "swr";
 
 type UserStore = {
-  isLoggedin: boolean;
+  isLoading: boolean;
+  isError?: any;
   user?: UserModel;
 };
 
-export async function userStore() {
-  const userStore: UserStore = {
-    isLoggedin: false,
-    user: undefined,
-  };
-  if (localStorage.getItem("token")) {
-    const res = await fetch("/api/user", {
+export default function useUser(token?: string): UserStore {
+  const fetcher = (path: string) =>
+    fetch(path, {
       method: "GET",
       headers: {
-        authorization: `Bearer ${localStorage.getItem("token")}`,
+        authorization: `Bearer ${
+          token || localStorage.getItem("access_token")
+        }`,
       },
     });
-    const data = await res.json();
-    if (data) {
-      userStore.user = data;
-      userStore.isLoggedin = true;
-    }
-  }
-  return userStore;
+  const { data, error } = useSWR("/api/user", fetcher);
+  return {
+    user: data,
+    isError: error,
+    isLoading: !data && !error,
+  };
 }

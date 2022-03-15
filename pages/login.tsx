@@ -2,9 +2,10 @@ import type { NextPage } from "next";
 import Link from "next/link";
 import Head from "next/head";
 import { useRouter } from "next/router";
-import { FormEvent, useState } from "react";
+import { FormEvent, useEffect, useState } from "react";
 import Button from "components/button";
 import Input from "components/input";
+import useUser from "util/user";
 
 type LoginButtonProps = {
   isLoading: boolean;
@@ -27,16 +28,20 @@ const LoginButton = ({ isLoading }: LoginButtonProps) => {
     </Button>
   );
 };
+
 function LoginForm() {
   const router = useRouter();
   const [isLoading, setLoading] = useState(false);
   const [error, setError] = useState({ status: null, message: null });
+
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
+
   const loginUser = async (event: FormEvent) => {
     event.preventDefault();
     const loginData = {
-      email: (document.getElementById("email-input") as HTMLInputElement).value,
-      password: (document.getElementById("password-input") as HTMLInputElement)
-        .value,
+      email,
+      password,
     };
     setLoading(true);
     const response = await fetch("/api/login", {
@@ -72,8 +77,6 @@ function LoginForm() {
     <form onSubmit={loginUser}>
       <div>
         <Input
-          name="email"
-          id="email-input"
           autoComplete="email"
           className={
             "rounded-b-none rounded-tr rounded-tl pt-3 pb-3 " +
@@ -81,18 +84,20 @@ function LoginForm() {
           }
           type="email"
           placeholder="Email"
+          value={email}
+          onChange={(event) => setEmail(event.target.value)}
         />
       </div>
       <div>
         <Input
-          name="password"
-          id="password-input"
           className={
             "rounded-t-none rounded-br rounded-bl border-t-0 pt-3 pb-3 " +
             passwordIncorrectError()?.class
           }
           type="password"
           placeholder="Password"
+          value={password}
+          onChange={(event) => setPassword(event.target.value)}
         />
       </div>
       <label className="text-red-500">{errorMessage()}</label>
@@ -102,6 +107,13 @@ function LoginForm() {
 }
 
 const Login: NextPage = () => {
+  const user = useUser();
+  const router = useRouter();
+
+  useEffect(() => {
+    if (user.user) router.replace("/");
+  }, [user.user, router]);
+
   return (
     <div className="max-w-lg mx-auto text-center">
       <Head>
