@@ -4,7 +4,7 @@ import { useRouter } from "next/router";
 import { FormEvent, useEffect, useState } from "react";
 import Button from "components/button";
 import { inputDefaultClass } from "components/input";
-import { userStore } from "util/user";
+import useUser from "util/user";
 import { CommentModel } from "models/comment";
 import { PostModel } from "models/post";
 import { UserModel } from "models/user";
@@ -15,16 +15,14 @@ const Post: NextPage = () => {
   const [post, setPost] = useState<{ post: PostModel; author: UserModel }>();
   const [comments, setComments] =
     useState<{ comment: CommentModel; user: UserModel }[]>();
-  const [user, setUser] = useState<UserModel>();
   const [commentToPost, setCommentToPost] = useState("");
   const [isSendingComment, setSendingComment] = useState(false);
   const [isDeletingComment, setDeletingComment] = useState(false);
-
+  const user = useUser();
   useEffect(() => {
     fetch(`/api/post/${postId}`)
       .then((res) => res.json())
       .then((data) => setPost(data));
-    userStore().then(({ user }) => setUser(user));
   }, [postId]);
 
   useEffect(() => {
@@ -77,7 +75,7 @@ const Post: NextPage = () => {
         {comment.user?.first_name} {comment.user?.last_name}
       </div>
       <p className="text-s p-1">{comment.comment.content}</p>
-      {user?._id?.toString() === comment.user._id?.toString() && (
+      {user.user?._id?.toString() === comment.user._id?.toString() && (
         <button
           className="text-xs text-slate-500"
           onClick={() => deleteComment(comment.comment._id)}
