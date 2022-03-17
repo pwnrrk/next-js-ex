@@ -10,6 +10,7 @@ const methodHandler: MethodHandler = {
     if (!authUser) return;
     await connectToDatabase();
     const user = await User.findById(authUser.user_id);
+    console.log(user);
     if (user) response.json(user);
   },
   async PATCH(request, response) {

@@ -28,7 +28,7 @@ export function verifyToken(
       return;
     }
     const decoded = jwt.verify(
-      token as string,
+      token.toString(),
       config.TOKEN_KEY,
       {}
     ) as DecodedUser;

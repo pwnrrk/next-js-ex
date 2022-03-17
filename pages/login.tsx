@@ -54,7 +54,7 @@ function LoginForm() {
     const result = await response.json();
     setLoading(false);
     if (result.status === "ok") {
-      localStorage.setItem("token", result.data.token);
+      localStorage.setItem("access_token", result.data.token);
       router.push("/profile");
       return;
     }

@@ -16,7 +16,7 @@ export default function useUser(token?: string): UserStore {
           token || localStorage.getItem("access_token")
         }`,
       },
-    });
+    }).then((res) => res.json());
   const { data, error } = useSWR("/api/user", fetcher);
   return {
     user: data,

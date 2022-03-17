@@ -94,7 +94,7 @@ const Post: NextPage = () => {
         <div>{getDateString(post?.post.createdAt)}</div>
       </div>
       <div className="my-5">{post?.post.description}</div>
-      <div className="p-5 my-5 rounded bg-slate-50">
+      <div className="p-5 my-5 rounded shadow shadow-black/50">
         <div className="my-5">
           <div className="my-5 font-medium">Comments</div>
           {!user && (
