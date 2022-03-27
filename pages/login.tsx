@@ -7,24 +7,10 @@ import Button from "components/button";
 import Input from "components/input";
 import useUser from "util/user";
 
-type LoginButtonProps = {
-  isLoading: boolean;
-};
-
-const LoginButton = ({ isLoading }: LoginButtonProps) => {
-  if (isLoading)
-    return (
-      <Button type="button" disabled>
-        Loading...
-      </Button>
-    );
-  return <Button type="submit">Login</Button>;
-};
-
 function LoginForm() {
   const router = useRouter();
   const [isLoading, setLoading] = useState(false);
-  const [error, setError] = useState({ status: null, message: null });
+  const [isError, setError] = useState<any>();
 
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
@@ -47,46 +33,30 @@ function LoginForm() {
     setLoading(false);
     if (result.status === "ok") {
       localStorage.setItem("access_token", result.data.token);
-      router.push("/profile");
-      return;
+      return router.push("/");
     }
     setError(result);
-  };
-  const errorClass = "border-red-500";
-  const noUserError = () => {
-    if (error.status === "no_user") return { error, class: errorClass };
-  };
-  const passwordIncorrectError = () => {
-    if (error.status === "invalid") return { error, class: errorClass };
-  };
-  const errorMessage = () => {
-    if (error.status) {
-      if (error.status === "no_user") return "No user founded";
-      return "Password incorrect";
-    }
   };
   return (
     <form onSubmit={loginUser}>
       <div className="grid gap-3">
         <Input
           autoComplete="email"
-          className={noUserError()?.class}
           type="email"
           placeholder="Email"
           value={email}
           onChange={(event) => setEmail(event.target.value)}
         />
         <Input
-          className={passwordIncorrectError()?.class}
           type="password"
           placeholder="Password"
           value={password}
           onChange={(event) => setPassword(event.target.value)}
+          warning={
+            isError?.status === "invalid" ? "Password is not correct" : false
+          }
         />
-      </div>
-      <label className="text-red-500">{errorMessage()}</label>
-      <div className="grid my-5">
-        <LoginButton isLoading={isLoading} />
+        <Button disabled={isLoading}>Login</Button>
       </div>
     </form>
   );

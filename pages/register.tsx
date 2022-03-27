@@ -6,20 +6,6 @@ import Link from "next/link";
 import { FormEvent, useState } from "react";
 import { useRouter } from "next/router";
 
-type RegisterButtonProps = {
-  isLoading: boolean;
-};
-
-const RegisterButton = ({ isLoading }: RegisterButtonProps) => {
-  if (isLoading)
-    return (
-      <Button type="submit" disabled>
-        Loading...
-      </Button>
-    );
-  return <Button type="submit">Register</Button>;
-};
-
 const RegisterForm = () => {
   const [isLoading, setLoading] = useState(false);
   const router = useRouter();
@@ -107,7 +93,7 @@ const RegisterForm = () => {
           />{" "}
           I have read and agree Term of service
         </label>
-        <RegisterButton isLoading={isLoading} />
+        <Button disabled={isLoading}>Register</Button>
       </div>
     </form>
   );
