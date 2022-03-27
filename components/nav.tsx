@@ -29,7 +29,7 @@ function UserMenu() {
 
 const Nav = () => {
   return (
-    <nav className="py-5 shadow shadow-black/50 flex">
+    <nav className="py-5 bg-white flex">
       <div className="flex-1 text-2xl font-bold px-3">
         <Link href="/">Blogs</Link>
       </div>

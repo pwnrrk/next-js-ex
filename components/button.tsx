@@ -21,7 +21,11 @@ const Button = (props: ButtonProps) => {
   return (
     <button
       {...props}
-      className={`${props.className} transition ease-out shadow shadow-black/50 rounded-sm px-3 py-1 text-white ${variant}`}
+      className={[
+        props.className,
+        "transition ease-out rounded-full px-3 py-2 text-white",
+        variant,
+      ].join(" ")}
     ></button>
   );
 };

@@ -14,19 +14,11 @@ type LoginButtonProps = {
 const LoginButton = ({ isLoading }: LoginButtonProps) => {
   if (isLoading)
     return (
-      <Button
-        type="submit"
-        disabled
-        className="w-full my-5 pb-3 pt-3 shadow-xl"
-      >
+      <Button type="button" disabled>
         Loading...
       </Button>
     );
-  return (
-    <Button type="submit" className="w-full my-5 pb-3 pt-3 shadow-xl">
-      Login
-    </Button>
-  );
+  return <Button type="submit">Login</Button>;
 };
 
 function LoginForm() {
@@ -75,25 +67,17 @@ function LoginForm() {
   };
   return (
     <form onSubmit={loginUser}>
-      <div>
+      <div className="grid gap-3">
         <Input
           autoComplete="email"
-          className={
-            "rounded-b-none rounded-tr rounded-tl pt-3 pb-3 " +
-            noUserError()?.class
-          }
+          className={noUserError()?.class}
           type="email"
           placeholder="Email"
           value={email}
           onChange={(event) => setEmail(event.target.value)}
         />
-      </div>
-      <div>
         <Input
-          className={
-            "rounded-t-none rounded-br rounded-bl border-t-0 pt-3 pb-3 " +
-            passwordIncorrectError()?.class
-          }
+          className={passwordIncorrectError()?.class}
           type="password"
           placeholder="Password"
           value={password}
@@ -101,7 +85,9 @@ function LoginForm() {
         />
       </div>
       <label className="text-red-500">{errorMessage()}</label>
-      <LoginButton isLoading={isLoading} />
+      <div className="grid my-5">
+        <LoginButton isLoading={isLoading} />
+      </div>
     </form>
   );
 }
@@ -122,13 +108,15 @@ const Login: NextPage = () => {
         <link rel="icon" href="/favicon.ico" />
       </Head>
       <main className="h-screen px-3">
-        <div className="rounded-lg p-3 bg-slate-100 my-5">
+        <div className="rounded-lg p-3 bg-white my-5">
           <h1 className="text-3xl my-12 font-bold">Login</h1>
           <LoginForm />
           <div className="my-5">
             New user?{" "}
             <span className="text-blue-500 hover:text-blue-600 hover:underline">
-              <Link href="/register">Register</Link>
+              <Link href="/register">
+                <a>Register</a>
+              </Link>
             </span>{" "}
           </div>
         </div>

@@ -15,13 +15,15 @@ const Home: NextPage = () => {
   const postList = posts.map((post) => (
     <li
       key={post._id?.toString()}
-      className="border-b cursor-pointer hover:bg-slate-200 transition ease border-b-slate-300 py-3"
+      className="cursor-pointer bg-white shadow-sm rounded hover:bg-slate-200 transition ease mb-1 py-3"
     >
       <Link href={`/post/${post._id}`} passHref={true}>
-        <div className="px-3">
-          <h3 className="text-lg">{post.title}</h3>
-          <p className="text-slate-500">{post.description}</p>
-        </div>
+        <a>
+          <div className="px-3">
+            <h3 className="text-lg">{post.title}</h3>
+            <p className="text-slate-500">{post.description}</p>
+          </div>
+        </a>
       </Link>
     </li>
   ));

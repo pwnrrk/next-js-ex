@@ -7,9 +7,9 @@ type LayoutProps = {
 
 export default function Layout({ children }: LayoutProps) {
   return (
-    <>
+    <div className="bg-zinc-100 min-h-screen">
       <Nav />
       {children}
-    </>
+    </div>
   );
 }

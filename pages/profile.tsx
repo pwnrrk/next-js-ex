@@ -59,7 +59,7 @@ const AddPostForm = ({
     setLoading(true);
     const response = await fetch("/api/post", {
       headers: {
-        authorization: `Bearer ${localStorage.getItem("token")}`,
+        authorization: `Bearer ${localStorage.access_token}`,
       },
       body: JSON.stringify(body),
       method: actionType,
@@ -137,7 +137,7 @@ function UserPost() {
     const response = await fetch("/api/post/me", {
       method: "GET",
       headers: {
-        authorization: `Bearer ${localStorage.getItem("token")}`,
+        authorization: `Bearer ${localStorage.access_token}`,
       },
     });
     const data = await response.json();

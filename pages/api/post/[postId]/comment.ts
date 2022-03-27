@@ -13,7 +13,7 @@ const methodHandler: MethodHandler = {
       await connectToDatabase();
       const comments = await Comment.find({
         post_id: new Types.ObjectId(postId.toString()),
-      });
+      }).sort({ createdAt: "desc" });
       const users = await User.find({
         _id: { $in: comments.map((c) => c.user_id) },
       });
@@ -23,7 +23,7 @@ const methodHandler: MethodHandler = {
           (user) => user._id.toString() === comment.user_id.toString()
         ),
       }));
-      response.json(results);
+      response.status(200).json(results);
     } catch (error) {
       errorHandler(error, response);
     }

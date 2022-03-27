@@ -13,19 +13,11 @@ type RegisterButtonProps = {
 const RegisterButton = ({ isLoading }: RegisterButtonProps) => {
   if (isLoading)
     return (
-      <Button
-        type="submit"
-        disabled
-        className="w-full my-5 pb-2 pt-2 shadow-xl"
-      >
+      <Button type="submit" disabled>
         Loading...
       </Button>
     );
-  return (
-    <Button type="submit" className="w-full my-5 pb-2 pt-2 shadow-xl">
-      Register
-    </Button>
-  );
+  return <Button type="submit">Register</Button>;
 };
 
 const RegisterForm = () => {
@@ -71,7 +63,7 @@ const RegisterForm = () => {
   };
   return (
     <form onSubmit={registerUser}>
-      <div className="my-3">
+      <div className="my-3 grid gap-3">
         <Input
           type="text"
           id="first-name-input"
@@ -79,8 +71,6 @@ const RegisterForm = () => {
           placeholder="First Name"
           required
         />
-      </div>
-      <div className="my-3">
         <Input
           type="text"
           id="last-name-input"
@@ -88,11 +78,7 @@ const RegisterForm = () => {
           placeholder="Last Name"
           required
         />
-      </div>
-      <div className="my-3">
         <Input type="email" id="email-input" name="email" placeholder="Email" />
-      </div>
-      <div className="my-3">
         <Input
           type="password"
           id="password-input"
@@ -102,8 +88,6 @@ const RegisterForm = () => {
           maxLength={16}
           required
         />
-      </div>
-      <div className="my-3">
         <Input
           type="password"
           id="confirm-password-input"
@@ -113,8 +97,6 @@ const RegisterForm = () => {
           maxLength={16}
           required
         />
-      </div>
-      <div className="my-3">
         <label>
           <Input
             type="checkbox"
@@ -140,7 +122,7 @@ const Register: NextPage = () => {
         <link rel="icon" href="/favicon.ico" />
       </Head>
       <main className="h-screen px-3">
-        <div className="rounded-lg p-3 bg-slate-100 my-5">
+        <div className="rounded-lg p-3 bg-white my-5">
           <h1 className="text-3xl my-12 font-bold">Register</h1>
           <RegisterForm />
           <div className="my-5">
