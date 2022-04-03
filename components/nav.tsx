@@ -3,7 +3,6 @@ import useUser from "util/user";
 
 function UserMenu() {
   const user = useUser();
-  console.log(user);
   if (user.isError)
     return (
       <>

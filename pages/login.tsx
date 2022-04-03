@@ -6,6 +6,7 @@ import { FormEvent, useEffect, useState } from "react";
 import Button from "components/button";
 import Input from "components/input";
 import useUser from "util/user";
+import resource from "util/resource";
 
 function LoginForm() {
   const router = useRouter();
@@ -17,25 +18,17 @@ function LoginForm() {
 
   const loginUser = async (event: FormEvent) => {
     event.preventDefault();
-    const loginData = {
-      email,
-      password,
-    };
     setLoading(true);
-    const response = await fetch("/api/login", {
-      body: JSON.stringify(loginData),
-      headers: {
-        "Content-Type": "application/json",
-      },
-      method: "POST",
+    const { data, error } = await resource.post("/api/login", {
+      body: { email, password },
     });
-    const result = await response.json();
     setLoading(false);
-    if (result.status === "ok") {
-      localStorage.setItem("access_token", result.data.token);
+    if (data) {
+      localStorage.setItem("access_token", data.data.token);
       return router.push("/");
     }
-    setError(result);
+    console.log(error);
+    setError(error);
   };
   return (
     <form onSubmit={loginUser}>
@@ -71,17 +64,20 @@ const Login: NextPage = () => {
   }, [user.user, router]);
 
   return (
-    <div className="max-w-lg mx-auto text-center">
+    <>
       <Head>
         <title>Blogs</title>
         <meta name="description" content="Blogs Test" />
         <link rel="icon" href="/favicon.ico" />
       </Head>
-      <main className="h-screen px-3">
-        <div className="rounded-lg p-3 bg-white my-5">
-          <h1 className="text-3xl my-12 font-bold">Login</h1>
+      <main className="h-screen max-w-lg mx-auto px-3">
+        <section
+          id="login"
+          className="grid gap-12 bg-white text-center rounded p-5 mt-5"
+        >
+          <h1 className="text-3xl font-bold">Login</h1>
           <LoginForm />
-          <div className="my-5">
+          <div>
             New user?{" "}
             <span className="text-blue-500 hover:text-blue-600 hover:underline">
               <Link href="/register">
@@ -89,9 +85,9 @@ const Login: NextPage = () => {
               </Link>
             </span>{" "}
           </div>
-        </div>
+        </section>
       </main>
-    </div>
+    </>
   );
 };
 

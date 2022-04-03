@@ -3,13 +3,19 @@ import Head from "next/head";
 import { useEffect, useState } from "react";
 import { PostModel } from "models/post";
 import Link from "next/link";
+import resource from "util/resource";
+
+async function getPosts() {
+  const { data, error } = await resource.get("/api/post");
+  if (data) return data;
+  console.trace(error);
+}
 
 const Home: NextPage = () => {
   const [posts, setPosts] = useState<PostModel[]>([]);
+
   useEffect(() => {
-    fetch("/api/post")
-      .then((response) => response.json())
-      .then((data) => setPosts(data));
+    getPosts().then((data) => setPosts(data || []));
   }, []);
 
   const postList = posts.map((post) => (
@@ -35,11 +41,9 @@ const Home: NextPage = () => {
         <meta name="description" content="Blogs Test" />
         <link rel="icon" href="/favicon.ico" />
       </Head>
-      <main className="h-screen">
-        <div className="rounded-lg p-5 bg-slate-100 my-5">
-          <ul>{postList}</ul>
-        </div>
-      </main>
+      <section className="px-5 mt-5">
+        <ul>{postList}</ul>
+      </section>
     </div>
   );
 };

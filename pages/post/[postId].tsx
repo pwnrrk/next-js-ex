@@ -8,6 +8,7 @@ import { CommentModel } from "models/comment";
 import { PostModel } from "models/post";
 import { UserModel } from "models/user";
 import useSWR from "swr";
+import resource from "util/resource";
 
 const Comment = (props: {
   comment: { comment: CommentModel; user: UserModel };
@@ -18,8 +19,7 @@ const Comment = (props: {
 
   async function deleteComment() {
     setIsDeleting(true);
-    await fetch(`/api/comment/${comment.comment._id}`, {
-      method: "DELETE",
+    await resource.delete(`/api/comment/${comment.comment._id}`, {
       headers: {
         authorization: `Bearer ${localStorage.access_token}`,
       },
@@ -114,15 +114,20 @@ const CommentForm = () => {
   );
 };
 
+async function getPost(postId?: string) {
+  if (!postId) return;
+  const { data, error } = await resource.get(`/api/post/${postId}`);
+  if (data) return data;
+  console.trace(error);
+}
+
 const Post: NextPage = () => {
   const router = useRouter();
   const { postId } = router.query;
   const [post, setPost] = useState<{ post: PostModel; author: UserModel }>();
 
   useEffect(() => {
-    fetch(`/api/post/${postId}`)
-      .then((res) => res.json())
-      .then((data) => setPost(data));
+    getPost(postId?.toString()).then((data) => setPost(data));
   }, [postId]);
 
   const getDateString = (date: string | undefined) => {
@@ -135,17 +140,15 @@ const Post: NextPage = () => {
   };
 
   return (
-    <main className="max-w-3xl mx-auto">
-      <div className="bg-white mt-5 p-3 rounded">
-        <h3 className="text-xl font-bold my-5">{post?.post.title}</h3>
-        <div className="text-slate-500 flex items-start justify-between">
-          <div className="text-lg">{post?.author.first_name}</div>
-          <div>{getDateString(post?.post.createdAt)}</div>
-        </div>
-        <div className="my-5">{post?.post.description}</div>
-        <CommentForm />
+    <div className="max-w-3xl mx-auto bg-white mt-5 p-3 rounded">
+      <h3 className="text-xl font-bold my-5">{post?.post.title}</h3>
+      <div className="text-slate-500 flex items-start justify-between">
+        <div className="text-lg">{post?.author.first_name}</div>
+        <div>{getDateString(post?.post.createdAt)}</div>
       </div>
-    </main>
+      <div className="my-5">{post?.post.description}</div>
+      <CommentForm />
+    </div>
   );
 };
 
